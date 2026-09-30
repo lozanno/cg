@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Costa Gráfica Landing
  * Description: Muestra la página onepage de Costa Gráfica en la portada y recibe su formulario de contacto (correo + respaldo en "Mensajes"). Desactívalo para volver al sitio de WordPress.
- * Version: 1.3.0
+ * Version: 1.3.1
  * Author: Costa Gráfica
  */
 
