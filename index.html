@@ -7,14 +7,23 @@
   <meta name="description" content="Costa Gráfica. Diseño e impresión. Imagina, crea, imprime.">
   <meta name="theme-color" content="#000b36">
   <link rel="icon" href="logo/logo.jpg">
+  <link rel="preload" href="fonts/roboto-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
   <style>
+    @font-face {
+      font-family: "Roboto Mono";
+      font-style: normal;
+      font-weight: 300 700;
+      font-display: swap;
+      src: url("fonts/roboto-mono-latin.woff2") format("woff2");
+    }
+
     :root {
       --bg: #000b36;
       --fg: #f4f4f0;
       --muted: #8e93ad;
       --line: #2a3563;
       --accent: #f2a81d;
-      --mono: "Courier New", Courier, "Courier Prime", monospace;
+      --mono: "Roboto Mono", ui-monospace, Menlo, monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
