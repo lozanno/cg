@@ -232,8 +232,8 @@
       <p>Somos el Centro de Impresión Digital líder en Puerto Vallarta y Bahía de Banderas con más de 25 años de experiencia. Estamos comprometidos con nuestros clientes para apoyarlos en sus necesidades de impresión digital, ofreciendo una excelente calidad a precios muy accesibles.</p>
     </section>
 
-    <!-- Formulario oculto temporalmente: quitar "hidden" para mostrarlo. -->
-    <section hidden>
+    <!-- cg:form -->
+    <section>
       <h2>CONTACTO</h2>
 
       <form id="contact" novalidate>
@@ -270,6 +270,7 @@
         <p>Recibimos tu mensaje y te contactaremos muy pronto.</p>
       </div>
     </section>
+    <!-- /cg:form -->
   </main>
 
   <footer>
@@ -314,7 +315,8 @@
       }, 800);
     }
 
-    form.addEventListener("submit", function (e) {
+    // El plugin de WordPress quita el formulario si está desactivado en Ajustes.
+    if (form) form.addEventListener("submit", function (e) {
       e.preventDefault();
       error.textContent = "";
 

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Costa Gráfica Landing
  * Description: Muestra la página onepage de Costa Gráfica en la portada y recibe su formulario de contacto (correo + respaldo en "Mensajes"). Desactívalo para volver al sitio de WordPress.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Author: Costa Gráfica
  */
 
@@ -13,6 +13,12 @@ if (!defined('ABSPATH')) {
 const CG_CONTACT_TO = 'info@costagrafica.com'; // Valor por defecto; se cambia en Ajustes → Costa Gráfica.
 const CG_POST_TYPE  = 'cg_mensaje';
 const CG_OPTION_TO  = 'cg_contact_to';
+const CG_OPTION_ON  = 'cg_form_enabled';
+
+function cg_form_enabled()
+{
+    return (bool) get_option(CG_OPTION_ON, false);
+}
 
 /** Correos que reciben el formulario (separados por coma). */
 function cg_contact_recipients()
@@ -40,7 +46,24 @@ add_action('admin_init', function () {
         },
     ));
 
+    register_setting('cg_settings', CG_OPTION_ON, array(
+        'type'              => 'boolean',
+        'default'           => false,
+        'sanitize_callback' => function ($value) {
+            return $value ? 1 : 0;
+        },
+    ));
+
     add_settings_section('cg_form', 'Formulario de contacto', '__return_false', 'costagrafica');
+
+    add_settings_field(CG_OPTION_ON, 'Mostrar formulario', function () {
+        printf(
+            '<label><input type="checkbox" id="%1$s" name="%1$s" value="1" %2$s> Mostrar el formulario de contacto en la portada</label>'
+            . '<p class="description">Después de cambiarlo, limpia la caché de GoDaddy y Cloudflare para verlo en el sitio.</p>',
+            esc_attr(CG_OPTION_ON),
+            checked(cg_form_enabled(), true, false)
+        );
+    }, 'costagrafica', 'cg_form', array('label_for' => CG_OPTION_ON));
 
     add_settings_field(CG_OPTION_TO, 'Enviar mensajes a', function () {
         printf(
@@ -90,6 +113,10 @@ add_action('template_redirect', function () {
 
     $base = plugin_dir_url(__FILE__) . 'site/';
     $html = file_get_contents($file);
+
+    if (!cg_form_enabled()) {
+        $html = preg_replace('#\s*<!-- cg:form -->.*?<!-- /cg:form -->#s', '', $html);
+    }
 
     // Rutas relativas del HTML -> URLs del plugin, y endpoint del formulario.
     $html = str_replace(
@@ -185,6 +212,10 @@ add_action('rest_api_init', function () {
 
 function cg_handle_contact(WP_REST_Request $request)
 {
+    if (!cg_form_enabled()) {
+        return new WP_Error('cg_disabled', 'El formulario no está disponible.', array('status' => 403));
+    }
+
     // Campo trampa: los bots lo llenan, las personas no lo ven.
     if ($request->get_param('website') !== null && $request->get_param('website') !== '') {
         return array('ok' => true);
