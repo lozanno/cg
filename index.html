@@ -189,6 +189,8 @@
     .thanks.show { opacity: 1; }
     .thanks p + p { margin-top: 1em; color: var(--muted); }
 
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
     .error {
       color: #ff8a80;
       font-size: 13px;
@@ -254,6 +256,10 @@
           <label for="mensaje">MENSAJE</label>
           <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
         </div>
+        <div class="hp" aria-hidden="true">
+          <label for="website">No llenar</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
         <button type="submit">ENVIAR</button>
         <p class="error" id="error" role="alert"></p>
       </form>
@@ -286,7 +292,7 @@
   </footer>
 
   <script>
-    // Endpoint que recibe el formulario (p. ej. Formspree: "https://formspree.io/f/XXXX").
+    // Endpoint que recibe el formulario. El plugin de WordPress lo llena al servir la página.
     // Si se deja vacío, el formulario solo muestra el agradecimiento sin enviar datos.
     var FORM_ENDPOINT = "";
 
