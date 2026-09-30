@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Costa Gráfica — imagina · crea · imprime</title>
+  <meta name="description" content="Costa Gráfica. Diseño e impresión. Imagina, crea, imprime.">
+  <meta name="theme-color" content="#000b36">
+  <link rel="icon" href="logo/logo.jpg">
+  <style>
+    :root {
+      --bg: #000b36;
+      --fg: #f4f4f0;
+      --muted: #8e93ad;
+      --line: #2a3563;
+      --accent: #f2a81d;
+      --mono: "Courier New", Courier, "Courier Prime", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main, footer {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .logo {
+      display: block;
+      width: 100%;
+      max-width: 460px;
+      height: auto;
+      aspect-ratio: 960 / 440;
+      object-fit: cover;
+      object-position: center;
+      margin: 72px auto 0;
+    }
+
+    .about {
+      margin: 40px 0 72px;
+      text-align: center;
+      color: var(--fg);
+    }
+
+    .about p + p { margin-top: 1em; color: var(--muted); }
+
+    h2 {
+      font-size: 13px;
+      font-weight: normal;
+      letter-spacing: .2em;
+      color: var(--accent);
+      margin-bottom: 32px;
+    }
+
+    form { transition: opacity .8s ease; }
+    form.out { opacity: 0; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: .12em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .field { margin-bottom: 28px; }
+
+    input, textarea {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      border-radius: 0;
+      color: var(--fg);
+      font: inherit;
+      font-size: 16px;
+      padding: 6px 0;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    textarea { resize: vertical; min-height: 120px; }
+
+    input:focus, textarea:focus { border-bottom-color: var(--accent); }
+
+    button {
+      appearance: none;
+      background: transparent;
+      color: var(--fg);
+      border: 1px solid var(--fg);
+      font: inherit;
+      letter-spacing: .2em;
+      padding: 12px 32px;
+      cursor: pointer;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+
+    button:hover, button:focus-visible {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+      outline: none;
+    }
+
+    button:disabled { opacity: .5; cursor: wait; }
+
+    .thanks {
+      display: none;
+      opacity: 0;
+      transition: opacity .8s ease;
+      text-align: center;
+      padding: 48px 0;
+    }
+
+    .thanks.show { opacity: 1; }
+    .thanks p + p { margin-top: 1em; color: var(--muted); }
+
+    .error {
+      color: #ff8a80;
+      font-size: 13px;
+      margin-top: 16px;
+      min-height: 1.7em;
+    }
+
+    footer {
+      margin-top: 96px;
+      padding-top: 32px;
+      padding-bottom: 48px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    footer ul { list-style: none; }
+    footer li + li { margin-top: 2px; }
+    footer .social { margin-top: 20px; }
+    footer .social a { margin: 0 10px; }
+    footer small { display: block; margin-top: 24px; font-size: 11px; }
+
+    a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--line); }
+    a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    @media (prefers-reduced-motion: reduce) {
+      form, .thanks { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="logo" src="logo/logo.jpg" alt="Costa Gráfica — imagina · crea · imprime" width="960" height="959">
+
+    <section class="about">
+      <p>Somos un estudio de diseño e impresión. Convertimos ideas en piezas impresas con carácter: identidad, papelería, señalización y todo lo que tu marca necesite para verse bien.</p>
+      <p>Cuéntanos tu proyecto.</p>
+    </section>
+
+    <section>
+      <h2>CONTACTO</h2>
+
+      <form id="contact" novalidate>
+        <div class="field">
+          <label for="nombre">NOMBRE COMPLETO</label>
+          <input id="nombre" name="nombre" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="telefono">TELÉFONO DE CONTACTO (WHATSAPP)</label>
+          <input id="telefono" name="telefono" type="tel" autocomplete="tel" inputmode="tel" required>
+        </div>
+        <div class="field">
+          <label for="email">EMAIL</label>
+          <input id="email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="asunto">ASUNTO</label>
+          <input id="asunto" name="asunto" type="text" required>
+        </div>
+        <div class="field">
+          <label for="mensaje">MENSAJE</label>
+          <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+        </div>
+        <button type="submit">ENVIAR</button>
+        <p class="error" id="error" role="alert"></p>
+      </form>
+
+      <div class="thanks" id="thanks" role="status" aria-live="polite">
+        <p>¡Gracias por escribirnos!</p>
+        <p>Recibimos tu mensaje y te contactaremos muy pronto.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- TODO: reemplazar con los datos reales de Costa Gráfica -->
+  <footer>
+    <ul>
+      <li>Costa Gráfica</li>
+      <li>Puerto Vallarta, Jalisco, México</li>
+      <li><a href="tel:+520000000000">+52 000 000 0000</a></li>
+      <li><a href="https://wa.me/520000000000">WhatsApp</a></li>
+      <li><a href="mailto:hola@costagrafica.com">hola@costagrafica.com</a></li>
+    </ul>
+    <p class="social">
+      <a href="https://instagram.com/costagrafica" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://facebook.com/costagrafica" target="_blank" rel="noopener">Facebook</a>
+    </p>
+    <small>© <span id="year">2026</span> costagrafica.com</small>
+  </footer>
+
+  <script>
+    // Endpoint que recibe el formulario (p. ej. Formspree: "https://formspree.io/f/XXXX").
+    // Si se deja vacío, el formulario solo muestra el agradecimiento sin enviar datos.
+    var FORM_ENDPOINT = "";
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    var form = document.getElementById("contact");
+    var thanks = document.getElementById("thanks");
+    var error = document.getElementById("error");
+
+    function showThanks() {
+      form.classList.add("out");
+      setTimeout(function () {
+        form.style.display = "none";
+        thanks.style.display = "block";
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { thanks.classList.add("show"); });
+        });
+      }, 800);
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      error.textContent = "";
+
+      if (!form.checkValidity()) {
+        var bad = form.querySelector(":invalid");
+        error.textContent = "Por favor completa todos los campos correctamente.";
+        if (bad) bad.focus();
+        return;
+      }
+
+      if (!FORM_ENDPOINT) return showThanks();
+
+      var btn = form.querySelector("button");
+      btn.disabled = true;
+
+      fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: new FormData(form)
+      }).then(function (res) {
+        if (!res.ok) throw new Error(res.status);
+        showThanks();
+      }).catch(function () {
+        btn.disabled = false;
+        error.textContent = "No pudimos enviar tu mensaje. Intenta de nuevo o escríbenos por WhatsApp.";
+      });
+    });
+  </script>
+</body>
+</html>
