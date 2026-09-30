@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Costa Gráfica Landing
  * Description: Muestra la página onepage de Costa Gráfica en la portada y recibe su formulario de contacto (correo + respaldo en "Mensajes"). Desactívalo para volver al sitio de WordPress.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Costa Gráfica
  */
 
@@ -10,8 +10,69 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-const CG_CONTACT_TO = 'info@costagrafica.com';
+const CG_CONTACT_TO = 'info@costagrafica.com'; // Valor por defecto; se cambia en Ajustes → Costa Gráfica.
 const CG_POST_TYPE  = 'cg_mensaje';
+const CG_OPTION_TO  = 'cg_contact_to';
+
+/** Correos que reciben el formulario (separados por coma). */
+function cg_contact_recipients()
+{
+    $emails = array_filter(array_map('trim', explode(',', (string) get_option(CG_OPTION_TO, CG_CONTACT_TO))), 'is_email');
+    return $emails ? array_values($emails) : array(CG_CONTACT_TO);
+}
+
+/* ---------------------------------------------------------------------------
+ * Ajustes → Costa Gráfica
+ * ------------------------------------------------------------------------- */
+
+add_action('admin_init', function () {
+    register_setting('cg_settings', CG_OPTION_TO, array(
+        'type'              => 'string',
+        'default'           => CG_CONTACT_TO,
+        'sanitize_callback' => function ($value) {
+            $emails  = array_filter(array_map('trim', explode(',', (string) $value)));
+            $valid   = array_filter(array_map('sanitize_email', $emails), 'is_email');
+            if (!$valid || count($valid) !== count($emails)) {
+                add_settings_error(CG_OPTION_TO, 'cg_invalid_email', 'Revisa los correos: alguno no es válido. No se guardaron los cambios.');
+                return get_option(CG_OPTION_TO, CG_CONTACT_TO);
+            }
+            return implode(', ', $valid);
+        },
+    ));
+
+    add_settings_section('cg_form', 'Formulario de contacto', '__return_false', 'costagrafica');
+
+    add_settings_field(CG_OPTION_TO, 'Enviar mensajes a', function () {
+        printf(
+            '<input type="text" class="regular-text" id="%1$s" name="%1$s" value="%2$s">'
+            . '<p class="description">Para varios destinatarios, sepáralos con coma.</p>',
+            esc_attr(CG_OPTION_TO),
+            esc_attr(implode(', ', cg_contact_recipients()))
+        );
+    }, 'costagrafica', 'cg_form', array('label_for' => CG_OPTION_TO));
+});
+
+add_action('admin_menu', function () {
+    add_options_page('Costa Gráfica', 'Costa Gráfica', 'manage_options', 'costagrafica', function () {
+        ?>
+        <div class="wrap">
+            <h1>Costa Gráfica</h1>
+            <form action="options.php" method="post">
+                <?php
+                settings_fields('cg_settings');
+                do_settings_sections('costagrafica');
+                submit_button('Guardar cambios');
+                ?>
+            </form>
+        </div>
+        <?php
+    });
+});
+
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
+    array_unshift($links, '<a href="' . esc_url(admin_url('options-general.php?page=costagrafica')) . '">Ajustes</a>');
+    return $links;
+});
 
 /* ---------------------------------------------------------------------------
  * Portada
@@ -177,7 +238,7 @@ function cg_handle_contact(WP_REST_Request $request)
         . "{$data['mensaje']}\n";
 
     $sent = wp_mail(
-        CG_CONTACT_TO,
+        cg_contact_recipients(),
         'Contacto web: ' . $data['asunto'],
         $body,
         array(sprintf('Reply-To: %s <%s>', str_replace(array('<', '>', '"'), '', $data['nombre']), $data['email']))
